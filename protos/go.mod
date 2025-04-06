@@ -1,4 +1,4 @@
-module protos
+module github.com/hoptdev/sso_pp/protos
 
 go 1.24.1
 
