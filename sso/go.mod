@@ -4,6 +4,7 @@ go 1.24.1
 
 require (
 	github.com/golang-jwt/jwt/v5 v5.2.2
+	github.com/hoptdev/sso_pp v0.0.0-20250406111704-947362010afe
 	github.com/ilyakaznacheev/cleanenv v1.5.0
 	github.com/jackc/pgx/v5 v5.7.4
 	google.golang.org/grpc v1.71.1
@@ -11,7 +12,6 @@ require (
 
 require (
 	github.com/BurntSushi/toml v1.2.1 // indirect
-	github.com/hoptdev/sso_pp v0.0.0-20250406111704-947362010afe // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
 	github.com/jackc/puddle/v2 v2.2.2 // indirect
