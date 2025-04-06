@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package auth;
+
+option go_package = "hopt.sso.v1;ssov1";
+
+service Auth {
+  rpc Login (LoginRequest) returns (LoginResponse);
+}
+
+message LoginRequest {
+  string password = 1;
+}
+
+message LoginResponse {
+  string refreshToken = 1;
+  string accessToken = 2;
+}

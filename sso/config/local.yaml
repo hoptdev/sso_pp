@@ -1,0 +1,5 @@
+env: "dev"
+psql_connect: ""
+grpc:
+  port: 7777
+  timeout: 5s
