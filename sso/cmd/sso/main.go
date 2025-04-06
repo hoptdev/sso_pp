@@ -3,6 +3,7 @@ package main
 import (
 	"log/slog"
 	"os"
+	"sso/internal/app"
 	"sso/internal/config"
 )
 
@@ -15,8 +16,11 @@ func main() {
 	cfg := config.Load()
 
 	log := setupLogger(cfg.Env)
+
 	log.Info("start application", slog.String("mode", cfg.Env))
 
+	application := app.New(log, cfg.GRPC.Port, cfg.PSQL_Connect)
+	application.GRPCServer.Run()
 }
 
 func setupLogger(env string) *slog.Logger {
