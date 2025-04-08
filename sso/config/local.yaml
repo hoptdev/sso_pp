@@ -1,5 +1,5 @@
 env: "dev"
-psql_connect: ""
+psql_connect: "postgres://postgres:admin@localhost:5432/authService_pp4"
 grpc:
   port: 7777
   timeout: 5s

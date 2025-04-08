@@ -40,7 +40,6 @@ func Load() *Config {
 func fetchConfigPath() string {
 	var result string
 
-	// --config==""
 	flag.StringVar(&result, "config", "", "path to config file")
 	flag.Parse()
 

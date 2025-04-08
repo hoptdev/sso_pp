@@ -6,6 +6,25 @@ option go_package = "hopt.sso.v1;ssov1";
 
 service Auth {
   rpc Login (LoginRequest) returns (LoginResponse);
+  rpc Refresh (RefreshRequest) returns (RefreshResponse);
+  rpc Validate (ValidateTokenRequest) returns (ValidateTokenResponse);
+}
+
+message ValidateTokenRequest {
+  string refreshToken = 1;
+}
+
+message ValidateTokenResponse {
+  bool isValid = 1;
+  int32 userId = 2; 
+}
+
+message RefreshRequest {
+  string refreshToken = 1;
+}
+
+message RefreshResponse {
+  string refreshToken = 1;
 }
 
 message LoginRequest {

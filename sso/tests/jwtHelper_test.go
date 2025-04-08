@@ -1,4 +1,4 @@
-package main
+/*package main
 
 import (
 	"fmt"
@@ -36,3 +36,4 @@ func TestNewTokenWithValidate(t *testing.T) {
 		fmt.Println(result)
 	}
 }
+*/

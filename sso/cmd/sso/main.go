@@ -1,10 +1,10 @@
 package main
 
 import (
+	"authservice/internal/app"
+	"authservice/internal/config"
 	"log/slog"
 	"os"
-	"sso/internal/app"
-	"sso/internal/config"
 )
 
 const (
