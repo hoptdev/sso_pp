@@ -50,15 +50,17 @@ func (s *serverAPI) Refresh(ctx context.Context, req *ssov1.RefreshRequest) (
 	}, nil
 }
 
-func (s *serverAPI) ValidateToken(ctx context.Context, req *ssov1.ValidateTokenRequest) (
+func (s *serverAPI) Validate(ctx context.Context, req *ssov1.ValidateTokenRequest) (
 	*ssov1.ValidateTokenResponse, error) {
 
-	t, err := s.auth.Refresh(ctx, req.GetRefreshToken())
-	if err != nil {
+	isValid, userId, err := s.auth.Validate(ctx, req.GetRefreshToken())
+
+	if !isValid || err != nil {
 		return nil, err
 	}
 
-	return &ssov1.RefreshResponse{
-		RefreshToken: t.RefreshToken,
+	return &ssov1.ValidateTokenResponse{
+		IsValid: isValid,
+		UserId:  int32(userId),
 	}, nil
 }

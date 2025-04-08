@@ -76,3 +76,21 @@ func (a *Auth) Refresh(ctx context.Context, refreshToken string) (models.TokenPa
 
 	return ntoken, nil
 }
+
+func (a *Auth) Validate(ctx context.Context, refreshToken string) (isValid bool, userId int, err error) {
+	var token models.TokenPair
+	token.RefreshToken = refreshToken
+
+	user, _ := a.userProvider.GetUserByToken(ctx, token)
+	if user == nil {
+		return false, userId, errors.New("user not found")
+	}
+
+	res, _, err := jwt.ValidateToken(token)
+
+	if !res && err != nil {
+		return false, userId, errors.New("token invalid")
+	}
+
+	return true, user.Id, nil
+}

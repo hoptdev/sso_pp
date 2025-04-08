@@ -4,7 +4,7 @@ go 1.24.1
 
 require (
 	github.com/golang-jwt/jwt/v5 v5.2.2
-	github.com/hoptdev/sso_protos v0.0.0-20250408174812-f38161ea2a6f
+	github.com/hoptdev/sso_protos v0.0.0-20250408175054-fe84ab1fb33c
 	github.com/ilyakaznacheev/cleanenv v1.5.0
 	github.com/jackc/pgx/v5 v5.7.4
 	google.golang.org/grpc v1.71.1
