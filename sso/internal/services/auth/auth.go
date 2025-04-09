@@ -8,6 +8,12 @@ import (
 	"log/slog"
 )
 
+var (
+	ErrUserNotFound   = errors.New("user not found")
+	ErrTokenInvalid   = errors.New("token invalid")
+	ErrorUpdateFailed = errors.New("update token failed")
+)
+
 type Auth struct {
 	log          *slog.Logger
 	userUpdater  UserUpdater
@@ -32,7 +38,7 @@ func (a *Auth) Login(ctx context.Context, password string) (models.TokenPair, er
 
 	user, err := a.userProvider.GetUserByPassword(ctx, password)
 	if err != nil {
-		return token, errors.New("user not found")
+		return token, ErrUserNotFound
 	}
 
 	token, err = jwt.NewPair(jwt.UserClaims{UserId: user.Id, Role: 1})
@@ -43,7 +49,7 @@ func (a *Auth) Login(ctx context.Context, password string) (models.TokenPair, er
 	err = a.userUpdater.UpdateUserToken(ctx, user, token)
 
 	if err != nil {
-		return token, errors.New("update token failed")
+		return token, ErrorUpdateFailed
 	}
 
 	return token, nil
@@ -55,23 +61,23 @@ func (a *Auth) Refresh(ctx context.Context, refreshToken string) (models.TokenPa
 
 	user, _ := a.userProvider.GetUserByToken(ctx, token)
 	if user == nil {
-		return token, errors.New("user not found")
+		return token, ErrUserNotFound
 	}
 
 	res, claims, err := jwt.ValidateToken(token)
 
 	if !res && err != nil {
-		return token, errors.New("token invalid")
+		return token, ErrTokenInvalid
 	}
 
 	ntoken, err := jwt.NewPair(claims)
 	if err != nil {
-		return token, errors.New("fail")
+		return token, ErrTokenInvalid
 	}
 
 	err = a.userUpdater.UpdateUserToken(ctx, user, ntoken)
 	if err != nil {
-		return token, errors.New("update token failed")
+		return token, ErrorUpdateFailed
 	}
 
 	return ntoken, nil
@@ -83,13 +89,13 @@ func (a *Auth) Validate(ctx context.Context, refreshToken string) (isValid bool,
 
 	user, _ := a.userProvider.GetUserByToken(ctx, token)
 	if user == nil {
-		return false, userId, errors.New("user not found")
+		return false, userId, ErrUserNotFound
 	}
 
 	res, _, err := jwt.ValidateToken(token)
 
 	if !res && err != nil {
-		return false, userId, errors.New("token invalid")
+		return false, userId, ErrTokenInvalid
 	}
 
 	return true, user.Id, nil

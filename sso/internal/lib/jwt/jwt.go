@@ -21,17 +21,6 @@ const (
 	accessMultiple  = 300
 )
 
-/*func GenerateAndValidateToken() (models.TokenPair, error) {
-	result, claims, nerr := ValidateToken(token)
-	if !result || nerr != nil {
-		return token, errors.New("invalid refresh token")
-	}
-
-	token.NewTokens(claims)
-
-	return token, nil
-} */
-
 func NewPair(claims UserClaims) (models.TokenPair, error) {
 	var token models.TokenPair
 
@@ -74,5 +63,7 @@ func ValidateToken(t models.TokenPair) (bool, UserClaims, error) {
 		return false, claims, err
 	}
 
-	return parser.Valid, claims, err
+	isExpired := claims.ExpiresAt.Unix() < time.Now().Unix()
+
+	return parser.Valid && !isExpired, claims, err
 }
