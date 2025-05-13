@@ -9,7 +9,7 @@ import (
 )
 
 type Auth interface {
-	Login(ctx context.Context, password string) (models.TokenPair, error)
+	Login(ctx context.Context, login string, password string) (models.TokenPair, error)
 	Refresh(ctx context.Context, refreshToken string) (models.TokenPair, error)
 	Validate(ctx context.Context, refreshToken string) (bool, int, error)
 }
@@ -26,7 +26,7 @@ func Register(gRPC *grpc.Server, auth Auth) {
 func (s *serverAPI) Login(ctx context.Context, req *ssov1.LoginRequest) (
 	*ssov1.LoginResponse, error) {
 
-	t, err := s.auth.Login(ctx, req.GetPassword())
+	t, err := s.auth.Login(ctx, req.GetLogin(), req.GetPassword())
 	if err != nil {
 		return nil, err
 	}

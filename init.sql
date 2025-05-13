@@ -1,0 +1,1 @@
+CREATE TABLE users (id SERIAL PRIMARY KEY, login varchar(512), token varchar(4096), pass varchar(2048));

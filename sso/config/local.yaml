@@ -1,5 +1,5 @@
 env: "dev"
-psql_connect: "postgres://postgres:admin@localhost:5432/authService_pp4"
+psql_connect: "postgres://amnesia:admin@localhost:5432/postgres"
 grpc:
-  port: 7777
+  port: 8888
   timeout: 5s

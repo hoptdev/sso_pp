@@ -20,6 +20,10 @@ github.com/hoptdev/sso_protos v0.0.0-20250408174812-f38161ea2a6f h1:1uXmwoGaDtpv
 github.com/hoptdev/sso_protos v0.0.0-20250408174812-f38161ea2a6f/go.mod h1:XnYyuiFOPdnZK8xXfENs50k4yncC21JuzE3MU6mPI/s=
 github.com/hoptdev/sso_protos v0.0.0-20250408175054-fe84ab1fb33c h1:XndeFNMoJYzvWQvx+N3WG7kCcCN6A/KFLfc+JFMBvNg=
 github.com/hoptdev/sso_protos v0.0.0-20250408175054-fe84ab1fb33c/go.mod h1:XnYyuiFOPdnZK8xXfENs50k4yncC21JuzE3MU6mPI/s=
+github.com/hoptdev/sso_protos v0.0.0-20250408194714-80fb90891b12 h1:yos8uJe3QsfZm6MH6yHQx6SAJueT202jPQ6qi7p3eSc=
+github.com/hoptdev/sso_protos v0.0.0-20250408194714-80fb90891b12/go.mod h1:XnYyuiFOPdnZK8xXfENs50k4yncC21JuzE3MU6mPI/s=
+github.com/hoptdev/sso_protos v0.0.2 h1:QpezrQSwxePo+t6efHISlDnH5M6Xtzgp/REr4WqvN9E=
+github.com/hoptdev/sso_protos v0.0.2/go.mod h1:XnYyuiFOPdnZK8xXfENs50k4yncC21JuzE3MU6mPI/s=
 github.com/ilyakaznacheev/cleanenv v1.5.0 h1:0VNZXggJE2OYdXE87bfSSwGxeiGt9moSR2lOrsHHvr4=
 github.com/ilyakaznacheev/cleanenv v1.5.0/go.mod h1:a5aDzaJrLCQZsazHol1w8InnDcOX0OColm64SlIi6gk=
 github.com/jackc/pgpassfile v1.0.0 h1:/6Hmqy13Ss2zCq62VdNG8tM1wchn8zjSGOBJ6icpsIM=

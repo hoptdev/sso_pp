@@ -5,6 +5,7 @@ import (
 	"authservice/internal/lib/jwt"
 	"context"
 	"errors"
+	"fmt"
 	"log/slog"
 )
 
@@ -22,7 +23,7 @@ type Auth struct {
 
 type UserProvider interface {
 	GetUserByToken(ctx context.Context, t models.TokenPair) (*models.User, error)
-	GetUserByPassword(ctx context.Context, password string) (*models.User, error)
+	GetUserByPassword(ctx context.Context, login string, password string) (*models.User, error)
 }
 
 type UserUpdater interface {
@@ -33,10 +34,10 @@ func New(log *slog.Logger, userSaver UserUpdater, userProvider UserProvider) *Au
 	return &Auth{log, userSaver, userProvider}
 }
 
-func (a *Auth) Login(ctx context.Context, password string) (models.TokenPair, error) {
+func (a *Auth) Login(ctx context.Context, login string, password string) (models.TokenPair, error) {
 	var token models.TokenPair
 
-	user, err := a.userProvider.GetUserByPassword(ctx, password)
+	user, err := a.userProvider.GetUserByPassword(ctx, login, password)
 	if err != nil {
 		return token, ErrUserNotFound
 	}
@@ -84,6 +85,8 @@ func (a *Auth) Refresh(ctx context.Context, refreshToken string) (models.TokenPa
 }
 
 func (a *Auth) Validate(ctx context.Context, refreshToken string) (isValid bool, userId int, err error) {
+	a.log.Info(fmt.Sprintf("Validate %v", refreshToken))
+
 	var token models.TokenPair
 	token.RefreshToken = refreshToken
 

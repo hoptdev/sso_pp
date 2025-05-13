@@ -58,7 +58,7 @@ func (s *Storage) GetUserByToken(ctx context.Context, t models.TokenPair) (*mode
 	return &user, nil
 }
 
-func (s *Storage) GetUserByPassword(ctx context.Context, password string) (*models.User, error) {
+func (s *Storage) GetUserByPassword(ctx context.Context, login string, password string) (*models.User, error) {
 	var user models.User
 	conn, err := s.dbPool.Acquire(ctx)
 	if err != nil {
@@ -67,8 +67,8 @@ func (s *Storage) GetUserByPassword(ctx context.Context, password string) (*mode
 
 	defer conn.Release()
 
-	query := "SELECT id, token FROM users WHERE pass = $1"
-	row := conn.QueryRow(ctx, query, password)
+	query := "SELECT id, token FROM users WHERE pass = $1 AND login = $2"
+	row := conn.QueryRow(ctx, query, password, login)
 	err = row.Scan(&user.Id, &user.Token)
 	if err != nil {
 		return nil, err

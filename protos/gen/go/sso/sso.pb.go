@@ -207,7 +207,8 @@ func (x *RefreshResponse) GetRefreshToken() string {
 
 type LoginRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Password      string                 `protobuf:"bytes,1,opt,name=password,proto3" json:"password,omitempty"`
+	Login         string                 `protobuf:"bytes,1,opt,name=login,proto3" json:"login,omitempty"`
+	Password      string                 `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -240,6 +241,13 @@ func (x *LoginRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use LoginRequest.ProtoReflect.Descriptor instead.
 func (*LoginRequest) Descriptor() ([]byte, []int) {
 	return file_sso_sso_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *LoginRequest) GetLogin() string {
+	if x != nil {
+		return x.Login
+	}
+	return ""
 }
 
 func (x *LoginRequest) GetPassword() string {
@@ -314,9 +322,10 @@ const file_sso_sso_proto_rawDesc = "" +
 	"\x0eRefreshRequest\x12\"\n" +
 	"\frefreshToken\x18\x01 \x01(\tR\frefreshToken\"5\n" +
 	"\x0fRefreshResponse\x12\"\n" +
-	"\frefreshToken\x18\x01 \x01(\tR\frefreshToken\"*\n" +
-	"\fLoginRequest\x12\x1a\n" +
-	"\bpassword\x18\x01 \x01(\tR\bpassword\"U\n" +
+	"\frefreshToken\x18\x01 \x01(\tR\frefreshToken\"@\n" +
+	"\fLoginRequest\x12\x14\n" +
+	"\x05login\x18\x01 \x01(\tR\x05login\x12\x1a\n" +
+	"\bpassword\x18\x02 \x01(\tR\bpassword\"U\n" +
 	"\rLoginResponse\x12\"\n" +
 	"\frefreshToken\x18\x01 \x01(\tR\frefreshToken\x12 \n" +
 	"\vaccessToken\x18\x02 \x01(\tR\vaccessToken2\xb5\x01\n" +
