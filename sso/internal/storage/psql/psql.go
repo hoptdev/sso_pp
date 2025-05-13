@@ -58,6 +58,25 @@ func (s *Storage) GetUserByToken(ctx context.Context, t models.TokenPair) (*mode
 	return &user, nil
 }
 
+func (s *Storage) GetUserByLogin(ctx context.Context, login string) (*models.User, error) {
+	var user models.User
+	conn, err := s.dbPool.Acquire(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	defer conn.Release()
+
+	query := "SELECT id, token FROM users WHERE login = $1 LIMIT 1"
+	row := conn.QueryRow(ctx, query, login)
+	err = row.Scan(&user.Id, &user.Token)
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}
+
 func (s *Storage) GetUserByPassword(ctx context.Context, login string, password string) (*models.User, error) {
 	var user models.User
 	conn, err := s.dbPool.Acquire(ctx)
@@ -89,4 +108,22 @@ func (s *Storage) UpdateUserToken(ctx context.Context, user *models.User, t mode
 	conn.QueryRow(ctx, query, t.RefreshToken, user.Id)
 
 	return nil
+}
+
+func (s *Storage) CreateUser(ctx context.Context, login string, password string) (int, error) {
+	conn, err := s.dbPool.Acquire(ctx)
+	if err != nil {
+		return 0, err
+	}
+
+	defer conn.Release()
+
+	query := "INSERT INTO users (login, pass, token) VALUES ($1, $2, $3) RETURNING id;"
+	row := conn.QueryRow(ctx, query, login, password, "")
+	var id int
+	if err := row.Scan(&id); err != nil {
+		return 0, err
+	}
+
+	return id, nil
 }

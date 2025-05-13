@@ -17,7 +17,7 @@ func New(log *slog.Logger, port int, psql_connect string) *App {
 		panic(err)
 	}
 
-	authService := auth.New(log, storage, storage)
+	authService := auth.New(log, storage, storage, storage)
 
 	grpcserver := grpcapp.New(log, port, authService)
 

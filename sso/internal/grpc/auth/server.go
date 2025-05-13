@@ -12,6 +12,7 @@ type Auth interface {
 	Login(ctx context.Context, login string, password string) (models.TokenPair, error)
 	Refresh(ctx context.Context, refreshToken string) (models.TokenPair, error)
 	Validate(ctx context.Context, refreshToken string) (bool, int, error)
+	Register(ctx context.Context, login string, password string) (bool, error)
 }
 
 type serverAPI struct {
@@ -62,5 +63,19 @@ func (s *serverAPI) Validate(ctx context.Context, req *ssov1.ValidateTokenReques
 	return &ssov1.ValidateTokenResponse{
 		IsValid: isValid,
 		UserId:  int32(userId),
+	}, nil
+}
+
+func (s *serverAPI) Register(ctx context.Context, req *ssov1.RegisterRequest) (
+	*ssov1.RegisterResponse, error) {
+
+	res, err := s.auth.Register(ctx, req.GetLogin(), req.GetPassword())
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &ssov1.RegisterResponse{
+		Success: res,
 	}, nil
 }

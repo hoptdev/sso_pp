@@ -13,25 +13,34 @@ var (
 	ErrUserNotFound   = errors.New("user not found")
 	ErrTokenInvalid   = errors.New("token invalid")
 	ErrorUpdateFailed = errors.New("update token failed")
+
+	ErrLoginExists    = errors.New("login exists")
+	ErrRegisterFailed = errors.New("register fail")
 )
 
 type Auth struct {
 	log          *slog.Logger
 	userUpdater  UserUpdater
 	userProvider UserProvider
+	userInserter UserInserter
 }
 
 type UserProvider interface {
 	GetUserByToken(ctx context.Context, t models.TokenPair) (*models.User, error)
 	GetUserByPassword(ctx context.Context, login string, password string) (*models.User, error)
+	GetUserByLogin(ctx context.Context, login string) (*models.User, error)
 }
 
 type UserUpdater interface {
 	UpdateUserToken(ctx context.Context, user *models.User, t models.TokenPair) error
 }
 
-func New(log *slog.Logger, userSaver UserUpdater, userProvider UserProvider) *Auth {
-	return &Auth{log, userSaver, userProvider}
+type UserInserter interface {
+	CreateUser(ctx context.Context, login string, password string) (int, error)
+}
+
+func New(log *slog.Logger, userSaver UserUpdater, userProvider UserProvider, userInserter UserInserter) *Auth {
+	return &Auth{log, userSaver, userProvider, userInserter}
 }
 
 func (a *Auth) Login(ctx context.Context, login string, password string) (models.TokenPair, error) {
@@ -54,6 +63,20 @@ func (a *Auth) Login(ctx context.Context, login string, password string) (models
 	}
 
 	return token, nil
+}
+
+func (a *Auth) Register(ctx context.Context, login string, password string) (bool, error) {
+	user, err := a.userProvider.GetUserByLogin(ctx, login)
+	if err != nil || user != nil {
+		return false, ErrLoginExists
+	}
+
+	_, err = a.userInserter.CreateUser(ctx, login, password)
+	if err != nil {
+		return false, ErrRegisterFailed
+	}
+
+	return true, nil
 }
 
 func (a *Auth) Refresh(ctx context.Context, refreshToken string) (models.TokenPair, error) {
