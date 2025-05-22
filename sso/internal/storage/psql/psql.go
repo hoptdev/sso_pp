@@ -3,9 +3,11 @@ package psql
 import (
 	"authservice/internal/domain/models"
 	"context"
+	"errors"
 	"log/slog"
 	"time"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -71,6 +73,9 @@ func (s *Storage) GetUserByLogin(ctx context.Context, login string) (*models.Use
 	row := conn.QueryRow(ctx, query, login)
 	err = row.Scan(&user.Id, &user.Token)
 	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return nil, nil
+		}
 		return nil, err
 	}
 

@@ -44,6 +44,8 @@ func New(log *slog.Logger, userSaver UserUpdater, userProvider UserProvider, use
 }
 
 func (a *Auth) Login(ctx context.Context, login string, password string) (models.TokenPair, error) {
+	a.log.Info(fmt.Sprintf("Login %v | %v", login, password))
+
 	var token models.TokenPair
 
 	user, err := a.userProvider.GetUserByPassword(ctx, login, password)
@@ -66,9 +68,10 @@ func (a *Auth) Login(ctx context.Context, login string, password string) (models
 }
 
 func (a *Auth) Register(ctx context.Context, login string, password string) (bool, error) {
+	a.log.Info(fmt.Sprintf("Register %v | %v", login, password))
 	user, err := a.userProvider.GetUserByLogin(ctx, login)
 	if err != nil || user != nil {
-		return false, ErrLoginExists
+		return false, err
 	}
 
 	_, err = a.userInserter.CreateUser(ctx, login, password)
@@ -80,6 +83,7 @@ func (a *Auth) Register(ctx context.Context, login string, password string) (boo
 }
 
 func (a *Auth) Refresh(ctx context.Context, refreshToken string) (models.TokenPair, error) {
+	a.log.Info(fmt.Sprintf("Refresh %v", refreshToken))
 	var token models.TokenPair
 	token.RefreshToken = refreshToken
 
