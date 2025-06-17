@@ -11,6 +11,7 @@ import (
 type UserClaims struct {
 	UserId int
 	Role   int
+	Type   string
 	jwt.RegisteredClaims
 }
 
@@ -37,15 +38,17 @@ func NewPair(claims UserClaims) (models.TokenPair, error) {
 }
 
 func NewRefreshToken(u UserClaims) (string, error) {
+	u.Type = "refresh"
 	return newToken(u, refreshMultiple)
 }
 
 func NewAccessToken(u UserClaims) (string, error) {
+	u.Type = "access"
 	return newToken(u, accessMultiple)
 }
 
 func newToken(u UserClaims, seconds int) (string, error) {
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{"userId": u.UserId, "role": u.Role, "exp": jwt.NewNumericDate(time.Now().Add(time.Duration(seconds) * 1e9))})
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{"userId": u.UserId, "role": u.Role, "type": u.Type, "exp": jwt.NewNumericDate(time.Now().Add(time.Duration(seconds) * 1e9))})
 
 	tokenStr, err := token.SignedString([]byte(test_key))
 

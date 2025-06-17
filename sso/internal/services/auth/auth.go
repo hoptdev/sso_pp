@@ -117,16 +117,11 @@ func (a *Auth) Validate(ctx context.Context, refreshToken string) (isValid bool,
 	var token models.TokenPair
 	token.RefreshToken = refreshToken
 
-	user, _ := a.userProvider.GetUserByToken(ctx, token)
-	if user == nil {
-		return false, userId, ErrUserNotFound
+	res, claims, err := jwt.ValidateToken(token)
+
+	if (!res && err != nil) || claims.Type == "refresh" {
+		return false, claims.UserId, ErrTokenInvalid
 	}
 
-	res, _, err := jwt.ValidateToken(token)
-
-	if !res && err != nil {
-		return false, userId, ErrTokenInvalid
-	}
-
-	return true, user.Id, nil
+	return true, claims.UserId, nil
 }
