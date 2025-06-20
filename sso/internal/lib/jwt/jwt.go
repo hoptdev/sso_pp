@@ -19,7 +19,7 @@ const test_key = "L0sUZ3a1m8XzuGRus3l9wnhIMwSc6cDzFJNnWwFZRMY="
 
 const (
 	refreshMultiple = 604800
-	accessMultiple  = 300
+	accessMultiple  = 604800 //300
 )
 
 func NewPair(claims UserClaims) (models.TokenPair, error) {

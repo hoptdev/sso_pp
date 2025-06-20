@@ -48,6 +48,7 @@ func (s *serverAPI) Refresh(ctx context.Context, req *ssov1.RefreshRequest) (
 
 	return &ssov1.RefreshResponse{
 		RefreshToken: t.RefreshToken,
+		AccessToken:  t.AccessToken,
 	}, nil
 }
 
